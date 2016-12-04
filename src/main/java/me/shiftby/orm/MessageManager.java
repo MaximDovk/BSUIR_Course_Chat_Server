@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
@@ -38,6 +39,9 @@ public class MessageManager {
         CriteriaQuery<Message> query = builder.createQuery(Message.class);
         query.where(builder.equal(query.from(Message.class).get("to"), to));
         List<Message> messages = session.createQuery(query).getResultList();
+        CriteriaDelete<Message> delete = builder.createCriteriaDelete(Message.class);
+        delete.where(builder.equal(delete.from(Message.class).get("to"), to));
+        session.createQuery(delete).executeUpdate();
         transaction.commit();
         session.close();
         return messages;
