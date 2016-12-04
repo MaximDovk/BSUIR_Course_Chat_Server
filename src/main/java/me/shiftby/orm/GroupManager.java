@@ -52,6 +52,10 @@ public class GroupManager {
     }
 
 
+    public Group findByName(String name) {
+        return groups.get(name);
+    }
+
     public boolean exist(String name) {
         return groups.containsKey(name);
     }
@@ -84,6 +88,8 @@ public class GroupManager {
     }
 
     public void close() {
-
+        groups.forEach((name, group) -> {
+            changeGroup(group);
+        });
     }
 }
