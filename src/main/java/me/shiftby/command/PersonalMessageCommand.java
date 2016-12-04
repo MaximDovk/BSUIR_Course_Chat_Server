@@ -16,7 +16,7 @@ public class PersonalMessageCommand implements Command {
 
     private String message;
 
-    public PersonalMessageCommand(String to, User from, String message) {
+    public PersonalMessageCommand(User from, String to, String message) {
         this.to = to;
         this.from = from;
         this.message = message;

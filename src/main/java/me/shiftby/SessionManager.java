@@ -49,12 +49,13 @@ public class SessionManager {
     }
 
     public void close() {
-        sessions.forEach((username, session) -> {
+        Object[] values = sessions.values().toArray();
+        for (int i = 0; i < values.length; i++) {
             try {
-                stopSession(session);
+                stopSession((Session) values[i]);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
+        }
     }
 }

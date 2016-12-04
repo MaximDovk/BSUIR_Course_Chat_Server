@@ -7,31 +7,21 @@ import me.shiftby.orm.GroupManager;
 
 import java.io.IOException;
 
-public class GroupMessageCommand implements Command {
+public class GroupConnectCommand implements Command {
 
     private User user;
     private String to;
 
-    private String message;
-
-    public GroupMessageCommand(User user, String to, String message) {
+    public GroupConnectCommand(User user, String to) {
         this.to = to;
         this.user = user;
-        this.message = message;
     }
 
     @Override
     public void execute() throws IOException {
         Group group = GroupManager.getInstance().findByName(to);
         if (group != null) {
-            group.send(new StringBuilder()
-                    .append("/gm ")
-                    .append(user.getUsername())
-                    .append(" ")
-                    .append(to)
-                    .append(" ")
-                    .append(message)
-                    .toString());
+            group.addUser(user);
         } else {
             SessionManager.getInstance().getByUsername(user.getUsername()).send("status.group.invalid");
         }

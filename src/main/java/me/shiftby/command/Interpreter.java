@@ -12,7 +12,7 @@ public class Interpreter {
             Pattern pattern = Pattern.compile("/pm\\s+(\\w+)\\s+(.*)");
             Matcher matcher = pattern.matcher(command);
             if (matcher.matches() && matcher.groupCount() == 2) {
-                return new PersonalMessageCommand(matcher.group(1), sender, matcher.group(2));
+                return new PersonalMessageCommand(sender, matcher.group(1), matcher.group(2));
             } else {
                 return new InvalidArgumentsCommand(sender);
             }
@@ -20,7 +20,7 @@ public class Interpreter {
             Pattern pattern = Pattern.compile("/gm\\s+(\\w+)\\s+(.*)");
             Matcher matcher = pattern.matcher(command);
             if (matcher.matches() && matcher.groupCount() == 2) {
-                return new GroupMessageCommand(matcher.group(1), sender, matcher.group(2));
+                return new GroupMessageCommand(sender, matcher.group(1), matcher.group(2));
             } else {
                 return new InvalidArgumentsCommand(sender);
             }
@@ -29,6 +29,22 @@ public class Interpreter {
             Matcher matcher = pattern.matcher(command);
             if (matcher.matches() && matcher.groupCount() == 1) {
                 return new BroadcastCommand(sender, matcher.group(1));
+            } else {
+                return new InvalidArgumentsCommand(sender);
+            }
+        } else if (command.startsWith("/gconnect")) {
+            Pattern pattern = Pattern.compile("/gconnect\\s+(.*)");
+            Matcher matcher = pattern.matcher(command);
+            if (matcher.matches() && matcher.groupCount() == 1) {
+                return new GroupConnectCommand(sender, matcher.group(1));
+            } else {
+                return new InvalidArgumentsCommand(sender);
+            }
+        } else if (command.startsWith("/gdisconnect")) {
+            Pattern pattern = Pattern.compile("/gdisconnect\\s+(.*)");
+            Matcher matcher = pattern.matcher(command);
+            if (matcher.matches() && matcher.groupCount() == 1) {
+                return new GroupDisconnectCommand(sender, matcher.group(1));
             } else {
                 return new InvalidArgumentsCommand(sender);
             }
