@@ -1,8 +1,10 @@
 package me.shiftby.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
+@Entity(name = "user")
 @Table(name = "users")
 public class User {
     @Id
@@ -16,13 +18,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
-    private Group[] groups;
+    @ManyToMany(targetEntity = Group.class, fetch = FetchType.EAGER)
+    private List<Group> groups;
 
     public User() {}
     public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;
+        groups = new ArrayList<>();
     }
 
 
@@ -50,10 +54,11 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-    public Group[] getGroups() {
-        return groups;
+
+    void addGroup(Group group) {
+        groups.add(group);
     }
-    public void setGroups(Group[] groups) {
-        this.groups = groups;
+    void removeGroup(Group group) {
+        groups.removeIf(g -> group.getId() == g.getId());
     }
 }
