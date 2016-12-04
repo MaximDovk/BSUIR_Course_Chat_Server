@@ -1,13 +1,13 @@
 package me.shiftby.command;
 
-import me.shiftby.Session;
+import me.shiftby.entity.User;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Interpreter {
 
-    public Command interpret(String command, Session sender) {
+    public Command interpret(String command, User sender) {
         if (command.startsWith("/pm")) {
             Pattern pattern = Pattern.compile("/pm\\s+(\\w+)\\s+(.*)");
             Matcher matcher = pattern.matcher(command);
@@ -34,6 +34,8 @@ public class Interpreter {
             }
         } else if (command.equals("/disconnect")) {
             return new DisconnectCommand(sender);
+        } else if (command.equals("/stop")) {
+            return new ServerStopCommand();
         }
         return new InvalidCommand(sender);
     }
