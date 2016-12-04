@@ -3,6 +3,7 @@ package me.shiftby;
 import me.shiftby.command.Command;
 import me.shiftby.entity.User;
 import me.shiftby.command.Interpreter;
+import me.shiftby.orm.MessageManager;
 
 import java.io.*;
 import java.net.Socket;
@@ -35,6 +36,19 @@ public class Session extends Thread {
 
     @Override
     public void run() {
+        MessageManager.getInstance().getMissedMessages(user).forEach(
+                message -> {
+                    try {
+                        send(new StringBuilder()
+                                .append("/pm ")
+                                .append(message.getFrom().getUsername())
+                                .append(" ")
+                                .append(message.getMessage())
+                                .toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
         String temp;
         try {
             socket.setSoTimeout(1000);
