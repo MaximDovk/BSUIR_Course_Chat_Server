@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity(name = "group")
 @Table(name = "groups")
@@ -40,13 +42,17 @@ public class Group {
     public void setName(String name) {
         this.name = name;
     }
-    public void addUser(User user) {
+    public void addUser(User user) throws IOException {
         users.add(user);
         user.addGroup(this);
     }
-    public void removeUser(User user) {
+    public void removeUser(User user) throws IOException {
         users.removeIf(u -> user.getId() == u.getId());
         user.removeGroup(this);
+    }
+
+    public Set<String> getMembers() {
+        return users.stream().map(User::getUsername).collect(Collectors.toSet());
     }
 
     public void send(String message) {
