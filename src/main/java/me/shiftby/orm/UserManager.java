@@ -45,12 +45,14 @@ public class UserManager {
         session.close();
         return count == 1;
     }
-    public void registerUser(User user) {
+    public void registerUsers(User ... users) {
         org.hibernate.Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        user.setUsername(user.getUsername().toLowerCase());
-        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(15)));
-        session.save(user);
+        for (User user : users) {
+            user.setUsername(user.getUsername().toLowerCase());
+            user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(15)));
+            session.save(user);
+        }
         transaction.commit();
         session.close();
     }
