@@ -5,6 +5,7 @@ import me.shiftby.entity.User;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Set;
 
 public class SessionManager {
 
@@ -34,6 +35,9 @@ public class SessionManager {
 
     public Session getByUsername(String username) {
         return sessions.get(username);
+    }
+    public Set<String> getUsers() {
+        return sessions.keySet();
     }
 
     public void broadcast(String message, User from) {

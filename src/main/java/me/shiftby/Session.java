@@ -60,7 +60,7 @@ public class Session extends Thread {
     }
 
     void stopSession() throws IOException {
-        send("STOP");
+        send("server.stop");
         isActive = false;
         socket.shutdownInput();
         socket.shutdownOutput();

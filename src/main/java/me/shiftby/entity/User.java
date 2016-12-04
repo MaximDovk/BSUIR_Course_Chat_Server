@@ -1,8 +1,13 @@
 package me.shiftby.entity;
 
+import me.shiftby.orm.UserManager;
+
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity(name = "user")
 @Table(name = "users")
@@ -55,10 +60,16 @@ public class User {
         this.role = role;
     }
 
-    void addGroup(Group group) {
+    void addGroup(Group group) throws IOException {
         groups.add(group);
+        UserManager.getInstance().changeUser(this);
     }
-    void removeGroup(Group group) {
+    void removeGroup(Group group) throws IOException {
         groups.removeIf(g -> group.getId() == g.getId());
+        UserManager.getInstance().changeUser(this);
+    }
+
+    public Set<String> getGroups() {
+        return groups.stream().map(Group::getName).collect(Collectors.toSet());
     }
 }

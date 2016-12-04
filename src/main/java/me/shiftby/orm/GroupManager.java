@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class GroupManager {
 
@@ -85,6 +86,10 @@ public class GroupManager {
         session.remove(group);
         transaction.commit();
         session.close();
+    }
+
+    public Set<String> getGroups() {
+        return groups.keySet();
     }
 
     public void close() {
