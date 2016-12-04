@@ -1,6 +1,7 @@
 package me.shiftby;
 
 import me.shiftby.command.Command;
+import me.shiftby.command.Interpreter;
 
 import java.io.*;
 import java.net.Socket;
