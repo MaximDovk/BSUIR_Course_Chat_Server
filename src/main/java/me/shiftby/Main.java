@@ -23,6 +23,7 @@ public class Main {
     private static Properties p;
     private static Logger logger;
     private static SessionFactory sessionFactory;
+    private static SocketListener socketListener;
 
     private static String mysqlUsername;
     private static String mysqlPassword;
@@ -34,19 +35,24 @@ public class Main {
     private static int serverPort;
 
     public static void main(String[] args) throws Exception {
-
-
         p = readProperties("server.conf.xml");
 
         logger = createLogger(loggerClass, loggerLevel);
         sessionFactory = createSessionFactory(p);
+
         GroupManager.getInstance();
         MessageManager.getInstance();
         UserManager.getInstance();
-        try (SocketListener socketListener = new SocketListener(serverPort)) {
 
-        }
+        socketListener = new SocketListener(serverPort);
+    }
+    public static void stop() throws Exception {
+        socketListener.close();
+        GroupManager.getInstance().close();
+        MessageManager.getInstance().close();
+        UserManager.getInstance().close();
         sessionFactory.close();
+        SessionManager.getInstance().close();
     }
 
     private static Properties readProperties(String path) throws IOException, ClassNotFoundException {
@@ -83,7 +89,7 @@ public class Main {
                 .setProperty("hibernate.connection.username", mysqlUsername)
                 .setProperty("hibernate.connection.password", mysqlPassword)
                 .setProperty("hibernate.show_sql", "true")
-                .setProperty("hibernate.hbm2ddl.auto", "create")
+                .setProperty("hibernate.hbm2ddl.auto", "validate")
                 .addAnnotatedClass(User.class)
                 .addAnnotatedClass(Group.class)
                 .addAnnotatedClass(Message.class);
