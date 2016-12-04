@@ -1,6 +1,6 @@
-package me.shiftby;
+package me.shiftby.command;
 
-import me.shiftby.command.*;
+import me.shiftby.Session;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

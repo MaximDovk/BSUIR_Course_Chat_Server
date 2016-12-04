@@ -18,7 +18,7 @@ public class Message {
     private User to;
     @Column(name = "message")
     private String message;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time")
     private Date time;
 

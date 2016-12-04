@@ -50,4 +50,8 @@ public class MessageManager {
         session.close();
     }
 
+    public void close() {
+
+    }
+
 }

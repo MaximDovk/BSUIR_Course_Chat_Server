@@ -14,7 +14,6 @@ public class UserManager {
 
     private SessionFactory sessionFactory;
 
-
     private static volatile UserManager instance;
     private UserManager() throws IOException {
         sessionFactory = Main.getSessionFactory();
@@ -32,6 +31,17 @@ public class UserManager {
         return localInstance;
     }
 
+    public User findByUsername(String username) {
+        org.hibernate.Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> query = builder.createQuery(User.class);
+        query.where(builder.equal(query.from(User.class).get("username"), username));
+        User user = session.createQuery(query).uniqueResult();
+        transaction.commit();
+        session.close();
+        return user;
+    }
 
     public boolean exist(String username) {
         org.hibernate.Session session = sessionFactory.openSession();
@@ -45,12 +55,14 @@ public class UserManager {
         session.close();
         return count == 1;
     }
-    public void registerUser(User user) {
+    public void registerUsers(User ... users) {
         org.hibernate.Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        user.setUsername(user.getUsername().toLowerCase());
-        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(15)));
-        session.save(user);
+        for (User user : users) {
+            user.setUsername(user.getUsername().toLowerCase());
+            user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(15)));
+            session.save(user);
+        }
         transaction.commit();
         session.close();
     }
@@ -61,15 +73,8 @@ public class UserManager {
         transaction.commit();
         session.close();
     }
-    public boolean checkPassword(String login, String password) {
-        org.hibernate.Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<User> query = builder.createQuery(User.class);
-        query.where(builder.equal(query.from(User.class).get("username"), login));
-        User user = session.createQuery(query).uniqueResult();
-        transaction.commit();
-        session.close();
-        return BCrypt.checkpw(password, user.getPassword());
+
+    public void close() {
+
     }
 }

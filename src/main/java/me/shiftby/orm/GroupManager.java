@@ -82,4 +82,8 @@ public class GroupManager {
         transaction.commit();
         session.close();
     }
+
+    public void close() {
+
+    }
 }

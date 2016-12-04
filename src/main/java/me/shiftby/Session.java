@@ -1,6 +1,8 @@
 package me.shiftby;
 
 import me.shiftby.command.Command;
+import me.shiftby.entity.User;
+import me.shiftby.command.Interpreter;
 
 import java.io.*;
 import java.net.Socket;
@@ -9,17 +11,17 @@ import java.net.SocketTimeoutException;
 
 public class Session extends Thread {
 
-    private String login;
+    private User user;
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
 
     private boolean isActive;
 
-    public Session(Socket socket, String login) throws IOException {
-        super(login);
+    public Session(Socket socket, User user) throws IOException {
+        super(user.getUsername());
         this.socket = socket;
-        this.login = login;
+        this.user = user;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         isActive = true;
@@ -42,7 +44,7 @@ public class Session extends Thread {
         while (isActive) {
             try {
                 temp = in.readLine();
-                Command command = (new Interpreter()).interpret(temp, this);
+                Command command = (new Interpreter()).interpret(temp, this.user);
                 Main.getLogger().info(command.getClass().toString());
                 command.execute();
             } catch (SocketTimeoutException e) {
@@ -53,11 +55,11 @@ public class Session extends Thread {
         }
     }
 
-    public String getLogin() {
-        return login;
+    public User getUser() {
+        return user;
     }
 
-    public void stopSession() throws IOException {
+    void stopSession() throws IOException {
         send("STOP");
         isActive = false;
         socket.shutdownInput();

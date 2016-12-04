@@ -1,22 +1,20 @@
 package me.shiftby.command;
 
-import me.shiftby.Main;
-import me.shiftby.Session;
 import me.shiftby.SessionManager;
+import me.shiftby.entity.User;
 
 public class BroadcastCommand implements Command {
-    private Session fromSession;
+    private User from;
     private String message;
 
-    public BroadcastCommand(Session fromSession, String message) {
-        this.fromSession = fromSession;
+    public BroadcastCommand(User from, String message) {
+        this.from = from;
         this.message = message;
     }
 
     @Override
     public void execute() throws Exception {
-        SessionManager.getInstance().broadcast(message, fromSession);
-        Main.getLogger().info(fromSession.getLogin() + ": " + message);
+        SessionManager.getInstance().broadcast(message, from);
     }
 
 }
