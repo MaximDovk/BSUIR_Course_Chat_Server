@@ -1,6 +1,6 @@
 package me.shiftby.command;
 
-import me.shiftby.SessionManager;
+import me.shiftby.Main;
 import me.shiftby.entity.User;
 
 import java.io.IOException;
@@ -16,9 +16,9 @@ public class ShowUsersCommand implements Command{
 
     @Override
     public void execute() throws IOException {
-        Set<String> users = SessionManager.getInstance().getUsers();
-        SessionManager
-                .getInstance()
+        Set<String> users = Main.getSessionManager().getUsers();
+        Main
+                .getSessionManager()
                 .getByUsername(user.getUsername())
                 .send(users
                         .stream()

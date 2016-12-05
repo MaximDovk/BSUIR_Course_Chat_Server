@@ -1,6 +1,6 @@
 package me.shiftby.command;
 
-import me.shiftby.SessionManager;
+import me.shiftby.Main;
 import me.shiftby.entity.Group;
 import me.shiftby.entity.User;
 import me.shiftby.orm.GroupManager;
@@ -33,7 +33,10 @@ public class GroupMessageCommand implements Command {
                     .append(message)
                     .toString());
         } else {
-            SessionManager.getInstance().getByUsername(user.getUsername()).send("status.group.invalid");
+            Main
+                    .getSessionManager()
+                    .getByUsername(user.getUsername())
+                    .send("status.group.invalid");
         }
     }
 }

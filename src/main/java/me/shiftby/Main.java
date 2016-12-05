@@ -1,5 +1,6 @@
 package me.shiftby;
 
+import me.shiftby.command.Interpreter;
 import me.shiftby.entity.Group;
 import me.shiftby.entity.Message;
 import me.shiftby.entity.User;
@@ -20,74 +21,61 @@ import java.util.Properties;
 
 public class Main {
 
-    private static Properties p;
+    private static Properties properties;
     private static Logger logger;
     private static SessionFactory sessionFactory;
     private static SocketListener socketListener;
-
-    private static String mysqlUsername;
-    private static String mysqlPassword;
-    private static String mysqlUrl;
-
-    private static Class loggerClass;
-    private static int loggerLevel;
-
-    private static int serverPort;
+    private static SessionManager sessionManager;
 
     public static void main(String[] args) throws Exception {
-        p = readProperties("server.conf.xml");
+        properties = readProperties("server.conf.xml");
+        Properties commandsProperties = readProperties("command.conf.xml");
 
-        logger = createLogger(loggerClass, loggerLevel);
-        sessionFactory = createSessionFactory(p);
+        logger = createLogger(properties);
+        sessionFactory = createSessionFactory(properties);
+        Interpreter interpreter = createInterpreter(commandsProperties);
+        sessionManager = createSessionManager(interpreter);
 
         GroupManager.getInstance();
         MessageManager.getInstance();
         UserManager.getInstance();
 
-        socketListener = new SocketListener(serverPort);
+        socketListener = createSocketListener(properties);
     }
+
     public static void stop() throws Exception {
         socketListener.close();
         GroupManager.getInstance().close();
         MessageManager.getInstance().close();
         UserManager.getInstance().close();
         sessionFactory.close();
-        SessionManager.getInstance().close();
+        sessionManager.close();
     }
 
-    private static Properties readProperties(String path) throws IOException, ClassNotFoundException {
+    private static Properties readProperties(String path) throws IOException {
         Properties properties = new Properties();
         InputStream stream = new FileInputStream(path);
         properties.loadFromXML(stream);
-        mysqlUsername = properties.getProperty("mysql.username", "root");
-        mysqlPassword = properties.getProperty("mysql.password", "");
-        mysqlUrl = properties.getProperty("mysql.url", "jdbc:mysql://localhost:3306/chat?serverTimezone=UTC");
-
-        loggerClass = Class.forName(properties.getProperty("logger", "me.shiftby.logger.ConsoleLogger"));
-        loggerLevel = Integer.parseInt(properties.getProperty("logger.level", "3"));
-
-        serverPort = Integer.parseInt(properties.getProperty("server.port", "6700"));
-
         return properties;
     }
-    public static String get(String key, String def) {
-        return p.getProperty(key, def);
-    }
-    public static String get(String key) {
-        return p.getProperty(key);
-    }
 
-    private static Logger createLogger(Class loggerClass, int loggerLevel)
-            throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        return (Logger)loggerClass.getDeclaredConstructors()[0].newInstance(loggerLevel);
+    private static Interpreter createInterpreter(Properties p) {
+        return new Interpreter(p);
+    }
+    private static SessionManager createSessionManager(Interpreter interpreter) {
+        return new SessionManager(interpreter);
+    }
+    private static SocketListener createSocketListener(Properties p) throws IOException {
+        int serverPort = Integer.parseInt(properties.getProperty("server.port", "6700"));
+        return new SocketListener(serverPort);
     }
     private static SessionFactory createSessionFactory(Properties p) {
         Configuration cfg = new Configuration()
                 .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect")
                 .setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver")
-                .setProperty("hibernate.connection.url", mysqlUrl)
-                .setProperty("hibernate.connection.username", mysqlUsername)
-                .setProperty("hibernate.connection.password", mysqlPassword)
+                .setProperty("hibernate.connection.url", p.getProperty("mysql.url", "jdbc:mysql://localhost:3306/chat?serverTimezone=UTC"))
+                .setProperty("hibernate.connection.username", p.getProperty("mysql.username", "root"))
+                .setProperty("hibernate.connection.password", p.getProperty("mysql.password", ""))
                 .setProperty("hibernate.show_sql", "true")
                 .setProperty("hibernate.hbm2ddl.auto", "validate")
                 .addAnnotatedClass(User.class)
@@ -98,11 +86,23 @@ public class Main {
         ServiceRegistry serviceRegistry = builder.build();
         return cfg.buildSessionFactory(serviceRegistry);
     }
+    private static Logger createLogger(Properties p)
+            throws ClassNotFoundException, IllegalAccessException,
+            InvocationTargetException, InstantiationException {
+        Class loggerClass = Class.forName(properties.getProperty("logger", "me.shiftby.logger.ConsoleLogger"));
+        int loggerLevel = Integer.parseInt(properties.getProperty("logger.level", "3"));
 
-    public static Logger getLogger() {
-        return logger;
+        return (Logger)loggerClass.getDeclaredConstructors()[0].newInstance(loggerLevel);
+    }
+
+
+    public static SessionManager getSessionManager() {
+        return sessionManager;
     }
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+    public static Logger getLogger() {
+        return logger;
     }
 }

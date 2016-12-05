@@ -1,5 +1,6 @@
 package me.shiftby;
 
+import me.shiftby.command.Interpreter;
 import me.shiftby.entity.User;
 
 import java.io.IOException;
@@ -9,19 +10,13 @@ import java.util.Set;
 
 public class SessionManager {
 
-    private static volatile SessionManager instance;
-    private SessionManager() {}
-    public static SessionManager getInstance() {
-        SessionManager localInstance = instance;
-        if (localInstance == null) {
-            synchronized (SessionManager.class) {
-                localInstance = instance = new SessionManager();
-            }
-        }
-        return localInstance;
+    private HashMap<String, Session> sessions = new HashMap<>();
+    private Interpreter interpreter;
+
+    public SessionManager(Interpreter interpreter) {
+        this.interpreter = interpreter;
     }
 
-    private HashMap<String, Session> sessions = new HashMap<>();
 
     public Session createSession(Socket socket, User user) throws IOException {
         Session session = new Session(socket, user);
@@ -61,5 +56,9 @@ public class SessionManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Interpreter getInterpreter() {
+        return interpreter;
     }
 }
