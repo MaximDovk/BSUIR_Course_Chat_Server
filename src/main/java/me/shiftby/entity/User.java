@@ -20,7 +20,6 @@ public class User {
     private String username;
     @Column(name = "password", length = 128)
     private String password;
-    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
     @ManyToMany(targetEntity = Group.class, fetch = FetchType.EAGER)
