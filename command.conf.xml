@@ -4,6 +4,9 @@
     <entry key="class.stop">me.shiftby.command.ServerStopCommand</entry>
     <entry key="regexp.stop">/stop</entry>
 
+    <entry key="class.restart">me.shiftby.command.ServerRestartCommand</entry>
+    <entry key="regexp.restart">/restart</entry>
+
     <entry key="class.disconnect">me.shiftby.command.DisconnectCommand</entry>
     <entry key="regexp.disconnect">/disconnect</entry>
 
