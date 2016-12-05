@@ -6,15 +6,18 @@ import me.shiftby.orm.UserManager;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserGroupsCommand implements Command {
 
     private User from;
     private String user;
 
-    public UserGroupsCommand(User from, String user) {
+    public UserGroupsCommand(User from, String command, Pattern pattern) {
         this.from = from;
-        this.user = user;
+        Matcher m = pattern.matcher(command);
+        user = m.group(1);
     }
 
     @Override

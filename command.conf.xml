@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="class.stop">me.shiftby.command.ServerStopCommand</entry>
+    <entry key="regexp.stop">/stop</entry>
+
+    <entry key="class.disconnect">me.shiftby.command.DisconnectCommand</entry>
+    <entry key="regexp.disconnect">/disconnect</entry>
+
+    <entry key="class.user_list">me.shiftby.command.ShowUsersCommand</entry>
+    <entry key="regexp.user_list">/ushow</entry>
+
+    <entry key="class.group_list">me.shiftby.command.ShowGroupsCommand</entry>
+    <entry key="regexp.group_list">/gshow</entry>
+
+
+    <entry key="class.user_groups">me.shiftby.command.UserGroupsCommand</entry>
+    <entry key="regexp.user_groups">/ugroups\s+(.+)</entry>
+
+    <entry key="class.group_members">me.shiftby.command.GroupMembersCommand</entry>
+    <entry key="regexp.group_members">/gmembers\s+(.+)</entry>
+
+    <entry key="class.group_disconnect">me.shiftby.command.GroupDisconnectCommand</entry>
+    <entry key="regexp.group_disconnect">/gdisconnect\s+(.+)</entry>
+
+    <entry key="class.group_connect">me.shiftby.command.GroupConnectCommand</entry>
+    <entry key="regexp.group_connect">/gconnect\s+(.+)</entry>
+
+
+    <entry key="class.personal_message">me.shiftby.command.PersonalMessageCommand</entry>
+    <entry key="regexp.personal_message">/pm\s+(\w+)\s+(.*)</entry>
+
+    <entry key="class.group_message">me.shiftby.command.GroupMessageCommand</entry>
+    <entry key="regexp.group_message">/gm\s+(\w+)\s+(.*)</entry>
+
+    <entry key="class.broadcast_message">me.shiftby.command.BroadcastCommand</entry>
+    <entry key="regexp.broadcast_message">/bm\s+(.*)</entry>
+</properties>

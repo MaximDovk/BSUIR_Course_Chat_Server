@@ -7,15 +7,18 @@ import me.shiftby.orm.GroupManager;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GroupMembersCommand implements Command {
 
-    private User user;
+    private User from;
     private String group;
 
-    public GroupMembersCommand(User user, String group) {
-        this.group = group;
-        this.user = user;
+    public GroupMembersCommand(User from, String command, Pattern pattern) {
+        this.from = from;
+        Matcher m = pattern.matcher(command);
+        group = m.group(1);
     }
 
     @Override
@@ -25,7 +28,7 @@ public class GroupMembersCommand implements Command {
             Set<String> groups = g.getMembers();
             Main
                     .getSessionManager()
-                    .getByUsername(user.getUsername())
+                    .getByUsername(from.getUsername())
                     .send(groups
                             .stream()
                             .reduce((s1, s2) -> s1 + ":" + s2)
@@ -33,7 +36,7 @@ public class GroupMembersCommand implements Command {
         } else {
             Main
                     .getSessionManager()
-                    .getByUsername(user.getUsername())
+                    .getByUsername(from.getUsername())
                     .send("status.group.invalid");
         }
     }

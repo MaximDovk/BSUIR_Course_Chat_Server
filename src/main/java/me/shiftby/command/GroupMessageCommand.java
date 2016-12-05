@@ -6,36 +6,39 @@ import me.shiftby.entity.User;
 import me.shiftby.orm.GroupManager;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GroupMessageCommand implements Command {
 
-    private User user;
-    private String to;
+    private User from;
+    private String group;
 
     private String message;
 
-    public GroupMessageCommand(User user, String to, String message) {
-        this.to = to;
-        this.user = user;
-        this.message = message;
+    public GroupMessageCommand(User from, String command, Pattern pattern) {
+        this.from = from;
+        Matcher m = pattern.matcher(command);
+        group = m.group(1);
+        message = m.group(2);
     }
 
     @Override
     public void execute() throws IOException {
-        Group group = GroupManager.getInstance().findByName(to);
-        if (group != null) {
-            group.send(new StringBuilder()
+        Group g = GroupManager.getInstance().findByName(group);
+        if (g != null) {
+            g.send(new StringBuilder()
                     .append("/gm ")
-                    .append(user.getUsername())
+                    .append(from.getUsername())
                     .append(" ")
-                    .append(to)
+                    .append(group)
                     .append(" ")
                     .append(message)
                     .toString());
         } else {
             Main
                     .getSessionManager()
-                    .getByUsername(user.getUsername())
+                    .getByUsername(from.getUsername())
                     .send("status.group.invalid");
         }
     }

@@ -4,16 +4,18 @@ import me.shiftby.Main;
 import me.shiftby.Session;
 import me.shiftby.entity.User;
 
-public class InvalidCommand implements Command {
-    private User user;
+import java.util.regex.Pattern;
 
-    public InvalidCommand(User user) {
-        this.user = user;
+public class InvalidCommand implements Command {
+    private User from;
+
+    public InvalidCommand(User from, String command, Pattern pattern) {
+        this.from = from;
     }
 
     @Override
     public void execute() throws Exception {
-        Session session = Main.getSessionManager().getByUsername(user.getUsername());
+        Session session = Main.getSessionManager().getByUsername(from.getUsername());
         session.send("status.command.invalid");
     }
 }
