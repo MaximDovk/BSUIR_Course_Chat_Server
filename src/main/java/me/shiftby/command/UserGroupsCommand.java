@@ -17,6 +17,7 @@ public class UserGroupsCommand implements Command {
     public UserGroupsCommand(User from, String command, Pattern pattern) {
         this.from = from;
         Matcher m = pattern.matcher(command);
+        m.matches();
         user = m.group(1);
     }
 

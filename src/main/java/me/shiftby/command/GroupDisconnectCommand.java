@@ -18,6 +18,7 @@ public class GroupDisconnectCommand implements Command {
     public GroupDisconnectCommand(User from, String command, Pattern pattern) {
         this.from = from;
         Matcher m = pattern.matcher(command);
+        m.matches();
         group = m.group(1);
     }
 

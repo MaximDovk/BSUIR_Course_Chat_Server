@@ -18,6 +18,7 @@ public class GroupMembersCommand implements Command {
     public GroupMembersCommand(User from, String command, Pattern pattern) {
         this.from = from;
         Matcher m = pattern.matcher(command);
+        m.matches();
         group = m.group(1);
     }
 

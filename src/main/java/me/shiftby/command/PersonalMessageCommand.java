@@ -21,6 +21,7 @@ public class PersonalMessageCommand implements Command {
     public PersonalMessageCommand(User from, String command, Pattern pattern) {
         this.from = from;
         Matcher m = pattern.matcher(command);
+        m.matches();
         to = m.group(1);
         message = m.group(2);
     }
