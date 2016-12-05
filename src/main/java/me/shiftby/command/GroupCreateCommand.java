@@ -28,6 +28,7 @@ public class GroupCreateCommand implements Command {
         try {
             GroupManager.getInstance().createGroup(g);
             g.addUser(from);
+            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.created");
         } catch (AlreadyExistException e) {
             Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.exist");
         }

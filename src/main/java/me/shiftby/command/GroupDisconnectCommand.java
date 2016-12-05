@@ -27,6 +27,7 @@ public class GroupDisconnectCommand implements Command {
         Group g = GroupManager.getInstance().findByName(group);
         if (g != null) {
             g.removeUser(from);
+            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.disconnected");
         } else {
             Main
                     .getSessionManager()

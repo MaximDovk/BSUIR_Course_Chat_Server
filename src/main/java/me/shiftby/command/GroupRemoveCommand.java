@@ -26,6 +26,7 @@ public class GroupRemoveCommand implements Command {
         Group g = GroupManager.getInstance().findByName(group);
         if (g != null) {
             GroupManager.getInstance().removeGroup(g);
+            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.removed");
         } else {
             Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.invalid");
         }

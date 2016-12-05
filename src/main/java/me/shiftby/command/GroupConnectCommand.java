@@ -26,6 +26,7 @@ public class GroupConnectCommand implements Command {
         Group g = GroupManager.getInstance().findByName(group);
         if (g != null) {
             g.addUser(from);
+            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.connected");
         } else {
             Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.invalid");
         }
