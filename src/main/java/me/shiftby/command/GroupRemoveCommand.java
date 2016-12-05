@@ -26,8 +26,12 @@ public class GroupRemoveCommand implements Command {
     public void execute() throws IOException {
         Group g = GroupManager.getInstance().findByName(group);
         if (g != null) {
-            GroupManager.getInstance().removeGroup(g);
-            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.removed");
+            if (g.isCreator(from)) {
+                GroupManager.getInstance().removeGroup(g);
+                Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.removed");
+            } else {
+                Main.getSessionManager().getByUsername(from.getUsername()).send("status.permission.invalid");
+            }
         } else {
             Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.invalid");
         }

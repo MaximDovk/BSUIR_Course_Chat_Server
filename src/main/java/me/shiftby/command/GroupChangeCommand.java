@@ -30,9 +30,14 @@ public class GroupChangeCommand implements Command {
     public void execute() throws IOException {
         Group g = GroupManager.getInstance().findByName(group);
         if (g != null) {
-            switch (key) {
+            if (g.isCreator(from)) {
+                switch (key) {
+
+                }
+                Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.changed");
+            } else {
+                Main.getSessionManager().getByUsername(from.getUsername()).send("status.permission.invalid");
             }
-            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.changed");
         } else {
             Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.invalid");
         }

@@ -30,8 +30,12 @@ public class GroupKickCommand implements Command {
         User u = UserManager.getInstance().findByUsername(user);
         if (g != null) {
             if (u != null) {
-                g.removeUser(u);
-                Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.kicked");
+                if (g.isCreator(from)) {
+                    g.removeUser(u);
+                    Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.kicked");
+                } else {
+                    Main.getSessionManager().getByUsername(from.getUsername()).send("status.permission.invalid");
+                }
             } else {
                 Main.getSessionManager().getByUsername(from.getUsername()).send("status.user.invalid");
             }
