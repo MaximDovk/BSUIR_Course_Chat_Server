@@ -25,7 +25,7 @@ public class GroupCreateCommand implements Command {
 
     @Override
     public void execute() throws IOException {
-        Group g = new Group(group);
+        Group g = new Group(group, from);
         try {
             GroupManager.getInstance().createGroup(g);
             g.addUser(from);
