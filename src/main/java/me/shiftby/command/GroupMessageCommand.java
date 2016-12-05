@@ -19,6 +19,7 @@ public class GroupMessageCommand implements Command {
     public GroupMessageCommand(User from, String command, Pattern pattern) {
         this.from = from;
         Matcher m = pattern.matcher(command);
+        m.matches();
         group = m.group(1);
         message = m.group(2);
     }

@@ -3,6 +3,7 @@ package me.shiftby.command;
 import me.shiftby.Main;
 import me.shiftby.entity.User;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BroadcastCommand implements Command {
@@ -11,7 +12,9 @@ public class BroadcastCommand implements Command {
 
     public BroadcastCommand(User from, String command, Pattern pattern) {
         this.from = from;
-        message = pattern.matcher(command).group(1);
+        Matcher m = pattern.matcher(command);
+        m.matches();
+        message = m.group(1);
     }
 
     @Override
