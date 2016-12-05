@@ -17,7 +17,7 @@ public class UserAuth {
         if (user != null && BCrypt.checkpw(password, user.getPassword())) {
             writer.write("status.credential.valid");
             writer.flush();
-            SessionManager.getInstance().createSession(socket, user);
+            Main.getSessionManager().createSession(socket, user);
         } else {
             writer.write("status.credential.invalid");
             writer.flush();
