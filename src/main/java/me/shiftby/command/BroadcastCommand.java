@@ -1,6 +1,7 @@
 package me.shiftby.command;
 
 import me.shiftby.Main;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 
 import java.util.regex.Matcher;
@@ -22,4 +23,8 @@ public class BroadcastCommand implements Command {
         Main.getSessionManager().broadcast(message, from);
     }
 
+    @Override
+    public Role getRole() {
+        return Role.ADMIN;
+    }
 }

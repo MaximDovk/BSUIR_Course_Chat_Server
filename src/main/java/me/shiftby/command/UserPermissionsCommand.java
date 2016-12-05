@@ -1,6 +1,7 @@
 package me.shiftby.command;
 
 import me.shiftby.Main;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 
 import java.util.regex.Pattern;
@@ -20,5 +21,10 @@ public class UserPermissionsCommand implements Command {
                 .getSessionManager()
                 .getByUsername(from.getUsername())
                 .send(from.getRole().toString());
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.USER;
     }
 }

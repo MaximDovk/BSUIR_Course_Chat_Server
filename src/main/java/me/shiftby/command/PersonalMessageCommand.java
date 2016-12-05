@@ -3,6 +3,7 @@ package me.shiftby.command;
 import me.shiftby.Main;
 import me.shiftby.Session;
 import me.shiftby.entity.Message;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 import me.shiftby.orm.MessageManager;
 import me.shiftby.orm.UserManager;
@@ -44,5 +45,10 @@ public class PersonalMessageCommand implements Command {
                 Main.getSessionManager().getByUsername(from.getUsername()).send("status.message.receiver.invalid");
             }
         }
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.USER;
     }
 }

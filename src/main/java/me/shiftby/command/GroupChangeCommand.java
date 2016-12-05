@@ -2,6 +2,7 @@ package me.shiftby.command;
 
 import me.shiftby.Main;
 import me.shiftby.entity.Group;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 import me.shiftby.orm.GroupManager;
 
@@ -29,11 +30,21 @@ public class GroupChangeCommand implements Command {
     public void execute() throws IOException {
         Group g = GroupManager.getInstance().findByName(group);
         if (g != null) {
-            switch (key) {
+            if (g.isCreator(from)) {
+                switch (key) {
+
+                }
+                Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.changed");
+            } else {
+                Main.getSessionManager().getByUsername(from.getUsername()).send("status.permission.invalid");
             }
-            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.changed");
         } else {
             Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.invalid");
         }
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.USER;
     }
 }

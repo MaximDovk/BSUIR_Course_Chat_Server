@@ -2,6 +2,7 @@ package me.shiftby.command;
 
 import me.shiftby.Main;
 import me.shiftby.entity.Group;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 import me.shiftby.orm.GroupManager;
 
@@ -25,11 +26,20 @@ public class GroupRemoveCommand implements Command {
     public void execute() throws IOException {
         Group g = GroupManager.getInstance().findByName(group);
         if (g != null) {
-            GroupManager.getInstance().removeGroup(g);
-            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.removed");
+            if (g.isCreator(from)) {
+                GroupManager.getInstance().removeGroup(g);
+                Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.removed");
+            } else {
+                Main.getSessionManager().getByUsername(from.getUsername()).send("status.permission.invalid");
+            }
         } else {
             Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.invalid");
         }
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.USER;
     }
 
 }

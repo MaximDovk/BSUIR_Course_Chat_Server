@@ -22,12 +22,16 @@ public class Group {
     private String name;
     @ManyToMany(targetEntity = User.class, mappedBy = "groups", fetch = FetchType.LAZY)
     private List<User> users;
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    private User creator;
 
     public Group() {
     }
-    public Group(String name) {
+
+    public Group(String name, User creator) {
         this.name = name;
         users = new ArrayList<>();
+        this.creator = creator;
     }
 
     public long getId() {
@@ -50,9 +54,18 @@ public class Group {
         users.removeIf(u -> user.getId() == u.getId());
         user.removeGroup(this);
     }
+    public User getCreator() {
+        return creator;
+    }
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
 
     public Set<String> getMembers() {
         return users.stream().map(User::getUsername).collect(Collectors.toSet());
+    }
+    public boolean isCreator(User user) {
+        return user.getId() == creator.getId();
     }
 
     public void send(String message) {

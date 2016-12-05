@@ -13,6 +13,9 @@ public enum Role {
     }
 
     public static boolean isGranted(Role role, Role userRole) {
+        if (role == userRole) {
+            return true;
+        }
         for (Role subRole : userRole.roles) {
             if (role == subRole || isGranted(role, subRole)) {
                 return true;

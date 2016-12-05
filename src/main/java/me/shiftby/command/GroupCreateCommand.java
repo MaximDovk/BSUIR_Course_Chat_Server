@@ -2,6 +2,7 @@ package me.shiftby.command;
 
 import me.shiftby.Main;
 import me.shiftby.entity.Group;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 import me.shiftby.exception.AlreadyExistException;
 import me.shiftby.orm.GroupManager;
@@ -24,7 +25,7 @@ public class GroupCreateCommand implements Command {
 
     @Override
     public void execute() throws IOException {
-        Group g = new Group(group);
+        Group g = new Group(group, from);
         try {
             GroupManager.getInstance().createGroup(g);
             g.addUser(from);
@@ -32,6 +33,11 @@ public class GroupCreateCommand implements Command {
         } catch (AlreadyExistException e) {
             Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.exist");
         }
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.USER;
     }
 
 }

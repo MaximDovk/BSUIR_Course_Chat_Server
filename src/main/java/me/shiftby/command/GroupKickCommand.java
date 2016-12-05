@@ -2,6 +2,7 @@ package me.shiftby.command;
 
 import me.shiftby.Main;
 import me.shiftby.entity.Group;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 import me.shiftby.orm.GroupManager;
 import me.shiftby.orm.UserManager;
@@ -29,14 +30,23 @@ public class GroupKickCommand implements Command {
         User u = UserManager.getInstance().findByUsername(user);
         if (g != null) {
             if (u != null) {
-                g.removeUser(u);
-                Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.kicked");
+                if (g.isCreator(from)) {
+                    g.removeUser(u);
+                    Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.kicked");
+                } else {
+                    Main.getSessionManager().getByUsername(from.getUsername()).send("status.permission.invalid");
+                }
             } else {
                 Main.getSessionManager().getByUsername(from.getUsername()).send("status.user.invalid");
             }
         } else {
             Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.invalid");
         }
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.USER;
     }
 
 
