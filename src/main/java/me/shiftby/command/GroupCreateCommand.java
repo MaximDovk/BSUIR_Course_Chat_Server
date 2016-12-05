@@ -2,6 +2,7 @@ package me.shiftby.command;
 
 import me.shiftby.Main;
 import me.shiftby.entity.Group;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 import me.shiftby.exception.AlreadyExistException;
 import me.shiftby.orm.GroupManager;
@@ -32,6 +33,11 @@ public class GroupCreateCommand implements Command {
         } catch (AlreadyExistException e) {
             Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.exist");
         }
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.USER;
     }
 
 }

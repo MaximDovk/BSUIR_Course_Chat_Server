@@ -1,6 +1,7 @@
 package me.shiftby.command;
 
 import me.shiftby.Main;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 import me.shiftby.orm.GroupManager;
 
@@ -26,5 +27,10 @@ public class ShowGroupsCommand implements Command {
                         .stream()
                         .reduce((s1, s2) -> s1 + ":" + s2)
                         .orElse("status.empty"));
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.USER;
     }
 }

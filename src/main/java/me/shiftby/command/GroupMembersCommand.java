@@ -2,6 +2,7 @@ package me.shiftby.command;
 
 import me.shiftby.Main;
 import me.shiftby.entity.Group;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 import me.shiftby.orm.GroupManager;
 
@@ -40,6 +41,11 @@ public class GroupMembersCommand implements Command {
                     .getByUsername(from.getUsername())
                     .send("status.group.invalid");
         }
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.USER;
     }
 
 }
