@@ -60,6 +60,7 @@ public class Main {
 
     public static void restart() throws Exception {
         stop();
+        Thread.sleep(1000);
         start();
     }
 
