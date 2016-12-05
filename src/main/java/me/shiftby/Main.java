@@ -28,6 +28,12 @@ public class Main {
     private static SessionManager sessionManager;
 
     public static void main(String[] args) throws Exception {
+        start();
+    }
+
+    private static void start()
+            throws IOException, ClassNotFoundException, InvocationTargetException,
+            InstantiationException, IllegalAccessException {
         properties = readProperties("server.conf.xml");
         Properties commandsProperties = readProperties("command.conf.xml");
 
@@ -50,6 +56,11 @@ public class Main {
         UserManager.getInstance().close();
         sessionFactory.close();
         sessionManager.close();
+    }
+
+    public static void restart() throws Exception {
+        stop();
+        start();
     }
 
     private static Properties readProperties(String path) throws IOException {
