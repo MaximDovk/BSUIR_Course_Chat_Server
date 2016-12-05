@@ -55,7 +55,7 @@ public class MessageManager {
     }
 
     public void close() {
-
+        instance = null;
     }
 
 }
