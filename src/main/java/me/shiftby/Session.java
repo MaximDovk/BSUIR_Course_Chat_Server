@@ -2,7 +2,6 @@ package me.shiftby;
 
 import me.shiftby.command.Command;
 import me.shiftby.entity.User;
-import me.shiftby.command.Interpreter;
 import me.shiftby.orm.MessageManager;
 
 import java.io.*;
@@ -58,7 +57,7 @@ public class Session extends Thread {
         while (isActive) {
             try {
                 temp = in.readLine();
-                Command command = (new Interpreter()).interpret(temp, this.user);
+                Command command = Main.getSessionManager().getInterpreter().interpret(temp, this.user);
                 Main.getLogger().info(command.getClass().toString());
                 command.execute();
             } catch (SocketTimeoutException e) {

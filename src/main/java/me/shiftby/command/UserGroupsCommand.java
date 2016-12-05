@@ -1,6 +1,6 @@
 package me.shiftby.command;
 
-import me.shiftby.SessionManager;
+import me.shiftby.Main;
 import me.shiftby.entity.User;
 import me.shiftby.orm.UserManager;
 
@@ -22,15 +22,18 @@ public class UserGroupsCommand implements Command {
         User u = UserManager.getInstance().findByUsername(user);
         if (u != null) {
             Set<String> groups = u.getGroups();
-            SessionManager
-                    .getInstance()
+            Main
+                    .getSessionManager()
                     .getByUsername(from.getUsername())
                     .send(groups
                             .stream()
                             .reduce((s1, s2) -> s1 + ":" + s2)
                             .orElse("status.empty"));
         } else {
-            SessionManager.getInstance().getByUsername(from.getUsername()).send("status.user.invalid");
+            Main
+                    .getSessionManager()
+                    .getByUsername(from.getUsername())
+                    .send("status.user.invalid");
         }
     }
 

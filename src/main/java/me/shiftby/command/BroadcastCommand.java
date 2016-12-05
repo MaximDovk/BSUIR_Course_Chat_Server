@@ -1,6 +1,6 @@
 package me.shiftby.command;
 
-import me.shiftby.SessionManager;
+import me.shiftby.Main;
 import me.shiftby.entity.User;
 
 public class BroadcastCommand implements Command {
@@ -14,7 +14,7 @@ public class BroadcastCommand implements Command {
 
     @Override
     public void execute() throws Exception {
-        SessionManager.getInstance().broadcast(message, from);
+        Main.getSessionManager().broadcast(message, from);
     }
 
 }

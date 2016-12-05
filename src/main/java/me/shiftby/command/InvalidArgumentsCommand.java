@@ -1,7 +1,7 @@
 package me.shiftby.command;
 
+import me.shiftby.Main;
 import me.shiftby.Session;
-import me.shiftby.SessionManager;
 import me.shiftby.entity.User;
 
 public class InvalidArgumentsCommand implements Command {
@@ -13,7 +13,7 @@ public class InvalidArgumentsCommand implements Command {
 
     @Override
     public void execute() throws Exception {
-        Session session = SessionManager.getInstance().getByUsername(user.getUsername());
+        Session session = Main.getSessionManager().getByUsername(user.getUsername());
         session.send("status.command.arguments.invalid");
     }
 }

@@ -1,7 +1,7 @@
 package me.shiftby.entity;
 
+import me.shiftby.Main;
 import me.shiftby.Session;
-import me.shiftby.SessionManager;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class Group {
 
     public void send(String message) {
         users.forEach(user -> {
-            Session session = SessionManager.getInstance().getByUsername(user.getUsername());
+            Session session = Main.getSessionManager().getByUsername(user.getUsername());
             if (session != null) {
                 try {
                     session.send(message);

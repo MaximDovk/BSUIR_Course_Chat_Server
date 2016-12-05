@@ -1,7 +1,7 @@
 package me.shiftby.command;
 
+import me.shiftby.Main;
 import me.shiftby.Session;
-import me.shiftby.SessionManager;
 import me.shiftby.entity.Message;
 import me.shiftby.entity.User;
 import me.shiftby.orm.MessageManager;
@@ -24,7 +24,7 @@ public class PersonalMessageCommand implements Command {
 
     @Override
     public void execute() throws IOException {
-        Session receiver = SessionManager.getInstance().getByUsername(to);
+        Session receiver = Main.getSessionManager().getByUsername(to);
         if (receiver != null) {
             receiver.send(new StringBuilder()
                     .append("/pm ")
@@ -37,7 +37,7 @@ public class PersonalMessageCommand implements Command {
             if (user != null) {
                 MessageManager.getInstance().saveMessage(new Message(from, user, message));
             } else {
-                SessionManager.getInstance().getByUsername(from.getUsername()).send("status.message.receiver.invalid");
+                Main.getSessionManager().getByUsername(from.getUsername()).send("status.message.receiver.invalid");
             }
         }
     }

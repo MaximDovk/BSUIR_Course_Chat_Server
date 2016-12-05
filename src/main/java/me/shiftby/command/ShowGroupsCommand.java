@@ -1,6 +1,6 @@
 package me.shiftby.command;
 
-import me.shiftby.SessionManager;
+import me.shiftby.Main;
 import me.shiftby.entity.User;
 import me.shiftby.orm.GroupManager;
 
@@ -18,8 +18,8 @@ public class ShowGroupsCommand implements Command {
     @Override
     public void execute() throws IOException {
         Set<String> groups = GroupManager.getInstance().getGroups();
-        SessionManager
-                .getInstance()
+        Main
+                .getSessionManager()
                 .getByUsername(user.getUsername())
                 .send(groups
                         .stream()
