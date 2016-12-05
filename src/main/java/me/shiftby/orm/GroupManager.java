@@ -93,6 +93,7 @@ public class GroupManager {
     }
 
     public void close() {
+        instance = null;
         groups.forEach((name, group) -> {
             changeGroup(group);
         });

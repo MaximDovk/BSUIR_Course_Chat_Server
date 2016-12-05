@@ -75,6 +75,6 @@ public class UserManager {
     }
 
     public void close() {
-
+        instance = null;
     }
 }
