@@ -35,6 +35,9 @@
     <entry key="class.group_remove">me.shiftby.command.GroupRemoveCommand</entry>
     <entry key="regexp.group_remove">/gremove\s+(.+)</entry>
 
+    <entry key="class.group_kick">me.shiftby.command.GroupKickCommand</entry>
+    <entry key="regexp.group_kick">/gkick\s+(\w+)\s+(.+)</entry>
+
 
     <entry key="class.personal_message">me.shiftby.command.PersonalMessageCommand</entry>
     <entry key="regexp.personal_message">/pm\s+(\w+)\s+(.*)</entry>
