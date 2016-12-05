@@ -3,6 +3,7 @@ package me.shiftby.orm;
 import me.shiftby.Main;
 import me.shiftby.UserAuth;
 import me.shiftby.entity.User;
+import me.shiftby.exception.AlreadyExistException;
 import org.hibernate.*;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -55,13 +56,17 @@ public class UserManager {
         session.close();
         return count == 1;
     }
-    public void registerUsers(User ... users) {
+    public void registerUsers(User ... users) throws AlreadyExistException {
         org.hibernate.Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         for (User user : users) {
             user.setUsername(user.getUsername().toLowerCase());
             user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(15)));
-            session.save(user);
+            try {
+                session.save(user);
+            } catch (Exception e) {
+                throw new AlreadyExistException(e);
+            }
         }
         transaction.commit();
         session.close();

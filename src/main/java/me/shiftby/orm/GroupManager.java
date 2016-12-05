@@ -3,6 +3,7 @@ package me.shiftby.orm;
 import me.shiftby.Main;
 import me.shiftby.UserAuth;
 import me.shiftby.entity.Group;
+import me.shiftby.exception.AlreadyExistException;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
@@ -60,7 +61,7 @@ public class GroupManager {
     public boolean exist(String name) {
         return groups.containsKey(name);
     }
-    public void createGroup(Group group) throws Exception {
+    public void createGroup(Group group) throws AlreadyExistException {
         if (!groups.containsKey(group.getName())) {
             groups.put(group.getName(), group);
             org.hibernate.Session session = sessionFactory.openSession();
@@ -69,7 +70,7 @@ public class GroupManager {
             transaction.commit();
             session.close();
         } else {
-            throw new Exception();
+            throw new AlreadyExistException();
         }
     }
     public void changeGroup(Group group) {
