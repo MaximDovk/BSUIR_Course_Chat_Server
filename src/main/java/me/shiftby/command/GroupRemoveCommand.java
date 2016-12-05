@@ -1,6 +1,5 @@
 package me.shiftby.command;
 
-
 import me.shiftby.Main;
 import me.shiftby.entity.Group;
 import me.shiftby.entity.User;
@@ -10,12 +9,12 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GroupDisconnectCommand implements Command {
+public class GroupRemoveCommand implements Command {
 
     private User from;
     private String group;
 
-    public GroupDisconnectCommand(User from, String command, Pattern pattern) {
+    public GroupRemoveCommand(User from, String command, Pattern pattern) {
         this.from = from;
         Matcher m = pattern.matcher(command);
         m.matches();
@@ -26,13 +25,11 @@ public class GroupDisconnectCommand implements Command {
     public void execute() throws IOException {
         Group g = GroupManager.getInstance().findByName(group);
         if (g != null) {
-            g.removeUser(from);
-            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.disconnected");
+            GroupManager.getInstance().removeGroup(g);
+            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.removed");
         } else {
-            Main
-                    .getSessionManager()
-                    .getByUsername(from.getUsername())
-                    .send("status.group.invalid");
+            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.invalid");
         }
     }
+
 }

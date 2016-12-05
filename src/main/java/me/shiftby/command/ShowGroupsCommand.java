@@ -25,6 +25,6 @@ public class ShowGroupsCommand implements Command {
                 .send(groups
                         .stream()
                         .reduce((s1, s2) -> s1 + ":" + s2)
-                        .orElse(""));
+                        .orElse("status.empty"));
     }
 }

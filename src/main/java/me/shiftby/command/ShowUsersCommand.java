@@ -24,6 +24,6 @@ public class ShowUsersCommand implements Command{
                 .send(users
                         .stream()
                         .reduce((s1, s2) -> s1 + ":" + s2)
-                        .orElse(""));
+                        .orElse("status.empty"));
     }
 }

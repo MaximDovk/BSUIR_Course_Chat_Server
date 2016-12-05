@@ -3,6 +3,8 @@ package me.shiftby.orm;
 import me.shiftby.Main;
 import me.shiftby.UserAuth;
 import me.shiftby.entity.Group;
+import me.shiftby.exception.AlreadyExistException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
@@ -19,8 +21,12 @@ public class GroupManager {
 
 
     private static volatile GroupManager instance;
+    private Session session;
+    private Transaction transaction;
+
     private GroupManager() {
         sessionFactory = Main.getSessionFactory();
+        session = sessionFactory.openSession();
         groups = loadGroups();
 
     }
@@ -39,14 +45,12 @@ public class GroupManager {
 
 
     private HashMap<String, Group> loadGroups() {
-        org.hibernate.Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
+        transaction = session.beginTransaction();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Object> query = builder.createQuery();
         query.select(query.from(Group.class));
         List list = session.createQuery(query).getResultList();
         transaction.commit();
-        session.close();
         HashMap<String, Group> result = new HashMap<>();
         list.forEach((val) -> result.put(((Group)val).getName(), (Group)val));
         return result;
@@ -60,32 +64,26 @@ public class GroupManager {
     public boolean exist(String name) {
         return groups.containsKey(name);
     }
-    public void createGroup(Group group) throws Exception {
+    public void createGroup(Group group) throws AlreadyExistException {
         if (!groups.containsKey(group.getName())) {
             groups.put(group.getName(), group);
-            org.hibernate.Session session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
             session.save(group);
             transaction.commit();
-            session.close();
         } else {
-            throw new Exception();
+            throw new AlreadyExistException();
         }
     }
     public void changeGroup(Group group) {
-        org.hibernate.Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.update(group);
         transaction.commit();
-        session.close();
     }
     public void removeGroup(Group group) {
         groups.remove(group.getName());
-        org.hibernate.Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.remove(group);
         transaction.commit();
-        session.close();
     }
 
     public Set<String> getGroups() {
@@ -94,8 +92,11 @@ public class GroupManager {
 
     public void close() {
         instance = null;
-        groups.forEach((name, group) -> {
-            changeGroup(group);
-        });
+        Transaction transaction = session.beginTransaction();
+        for (Group group : groups.values()) {
+            session.update(group);
+        }
+        transaction.commit();
+        session.close();
     }
 }
