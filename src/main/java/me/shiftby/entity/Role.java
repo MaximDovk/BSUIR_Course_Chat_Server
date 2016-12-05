@@ -9,6 +9,7 @@ public enum Role {
 
     Role(String name, Role ... roles) {
         this.roles = roles;
+        this.name = name;
     }
 
     public static boolean isGranted(Role role, Role userRole) {
@@ -18,14 +19,6 @@ public enum Role {
             }
         }
         return false;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public static Role fromString(String role) {
-        return Role.valueOf(role);
     }
 
     @Override
