@@ -62,8 +62,11 @@ public class Session extends Thread {
                 command.execute();
             } catch (SocketTimeoutException e) {
                 Main.getLogger().lowLevel("socket.timeout");
+            } catch (SocketException e) {
+                isActive = false;
             } catch (Exception e) {
                 isActive = false;
+                e.printStackTrace();
             }
         }
     }
