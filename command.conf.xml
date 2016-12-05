@@ -35,4 +35,8 @@
 
     <entry key="class.broadcast_message">me.shiftby.command.BroadcastCommand</entry>
     <entry key="regexp.broadcast_message">/bm\s+(.*)</entry>
+
+
+    <entry key="class.user_permissions">me.shiftby.command.UserPermissionsCommand</entry>
+    <entry key="regexp.user_permissions">/uperm</entry>
 </properties>
