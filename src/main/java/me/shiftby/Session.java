@@ -1,6 +1,8 @@
 package me.shiftby;
 
 import me.shiftby.command.Command;
+import me.shiftby.command.InvalidCommand;
+import me.shiftby.entity.Role;
 import me.shiftby.entity.User;
 import me.shiftby.orm.MessageManager;
 
@@ -58,7 +60,9 @@ public class Session extends Thread {
             try {
                 temp = in.readLine();
                 Command command = Main.getSessionManager().getInterpreter().interpret(temp, this.user);
-                Main.getLogger().info(command.getClass().toString());
+                if (!Role.isGranted(command.getRole(), user.getRole())) {
+                    command = new InvalidCommand(user);
+                }
                 command.execute();
             } catch (SocketTimeoutException e) {
                 Main.getLogger().lowLevel("socket.timeout");
