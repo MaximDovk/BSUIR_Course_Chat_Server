@@ -5,13 +5,14 @@ import me.shiftby.entity.User;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class ShowUsersCommand implements Command{
 
-    private User user;
+    private User from;
 
-    public ShowUsersCommand(User user) {
-        this.user = user;
+    public ShowUsersCommand(User from, String command, Pattern pattern) {
+        this.from = from;
     }
 
     @Override
@@ -19,7 +20,7 @@ public class ShowUsersCommand implements Command{
         Set<String> users = Main.getSessionManager().getUsers();
         Main
                 .getSessionManager()
-                .getByUsername(user.getUsername())
+                .getByUsername(from.getUsername())
                 .send(users
                         .stream()
                         .reduce((s1, s2) -> s1 + ":" + s2)

@@ -6,24 +6,27 @@ import me.shiftby.entity.User;
 import me.shiftby.orm.GroupManager;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GroupConnectCommand implements Command {
 
-    private User user;
-    private String to;
+    private User from;
+    private String group;
 
-    public GroupConnectCommand(User user, String to) {
-        this.to = to;
-        this.user = user;
+    public GroupConnectCommand(User from, String command, Pattern pattern) {
+        this.from = from;
+        Matcher m = pattern.matcher(command);
+        group = m.group(1);
     }
 
     @Override
     public void execute() throws IOException {
-        Group group = GroupManager.getInstance().findByName(to);
-        if (group != null) {
-            group.addUser(user);
+        Group g = GroupManager.getInstance().findByName(group);
+        if (g != null) {
+            g.addUser(from);
         } else {
-            Main.getSessionManager().getByUsername(user.getUsername()).send("status.group.invalid");
+            Main.getSessionManager().getByUsername(from.getUsername()).send("status.group.invalid");
         }
     }
 }

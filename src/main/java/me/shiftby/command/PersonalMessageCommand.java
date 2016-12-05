@@ -8,6 +8,8 @@ import me.shiftby.orm.MessageManager;
 import me.shiftby.orm.UserManager;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PersonalMessageCommand implements Command {
 
@@ -16,10 +18,11 @@ public class PersonalMessageCommand implements Command {
 
     private String message;
 
-    public PersonalMessageCommand(User from, String to, String message) {
-        this.to = to;
+    public PersonalMessageCommand(User from, String command, Pattern pattern) {
         this.from = from;
-        this.message = message;
+        Matcher m = pattern.matcher(command);
+        to = m.group(1);
+        message = m.group(2);
     }
 
     @Override
